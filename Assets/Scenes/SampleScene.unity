@@ -564,6 +564,7 @@ MonoBehaviour:
   scrollpic: {fileID: 2800000, guid: 3c7b4f5318d63724c89c6b64c87c88f8, type: 3}
   movepic: {fileID: 2800000, guid: 4739a1ffdd36ad14bb180cf157f45791, type: 3}
   eyepic: {fileID: 2800000, guid: 6c69171cfa9c3f24da23f9fc2656eeb8, type: 3}
+  savepic: {fileID: 2800000, guid: 63d4efd4ba85c484d802f13d78b87465, type: 3}
 --- !u!4 &217741028
 Transform:
   m_ObjectHideFlags: 0

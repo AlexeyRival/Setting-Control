@@ -5,73 +5,72 @@ using System.IO;
 public class SettingControll : MonoBehaviour
 {
     public GUIStyle boxtexture, button, selectedbutton,paperbox,textbox,textfilebox;
-    int guisection = 0, selectedselection = 0;
-    List<string> arbitraryselections;
-    string bufferstring;
+    private int guisection = 0, selectedselection = 0;
+    private List<string> arbitraryselections;
+    private string bufferstring;
     public List<int> bufferindex, selectedcardindex;
-    bool addsection, addcard,addimage,creategreatpoint,addimportantevent,leftmenu,showinfo,movenow;
-    int addtype;
-    List<Card> cards;
-    int megacounter = 0, cardselector = 0,scroller=0;
-    public Texture2D dragpic, scalepic,verticalscalepic,horizontalscalepic,trashpic,sandclockpic,SettingControlLogo,dicepic,scrollpic,movepic,eyepic;
+    private bool addsection, addcard,addimage,creategreatpoint,addimportantevent,leftmenu,showinfo,showhelp,movenow,issave;
+    private int addtype;
+    private List<Card> cards;
+    private int megacounter = 0, cardselector = 0,scroller=0;
+    public Texture2D dragpic, scalepic,verticalscalepic,horizontalscalepic,trashpic,sandclockpic,SettingControlLogo,dicepic,scrollpic,movepic,eyepic,savepic;
     //фаза интерфейса
-    int guiphase = 0;
+    private int guiphase = 0;
     //загрузка/выгрузка
-    string projectpath;
+    private string projectpath;
     //список проектов
-    List<string> projectlist;
+    private List<string> projectlist,datelist;
     //список текстовиков
-    List<string> textslist;
-    List<string> stringlist;
-    int linecounter=0;
-    int textselector = -1;
+    private List<string> textslist;
+    private List<string> stringlist;
+    private int linecounter =0;
+    private int textselector = -1;
     //таймлайн
-    Texture2D graytexture;
-    int timeselector = -1;
-    int timezoneselector = -1;
-    bool timezonetype = false;
-    bool timelinegroup = false;
-    bool setontime;
+    private Texture2D graytexture;
+    private int timeselector = -1;
+    private int timezoneselector = -1;
+    private bool timezonetype = false;
+    private bool timelinegroup = false;
     //настройки таймлайна
-    int timescaler = 1;
-    string timenamer = "Год";
+    private int timescaler = 1;
+    private string timenamer = "Год";
     //ключевые точки
-    Texture2D greentexture,litegreentexture,orangetexture;
-    string greatpointname = "";
-    int greatpointpositionselector = 0;
+    private Texture2D greentexture,litegreentexture,orangetexture;
+    private string greatpointname = "";
+    private int greatpointpositionselector = 0;
     //важные события
-    List<ImportantEvent> importantEvents;
-    Color buffercolor;
-    Texture2D buffercolortexture;
-    int buffertimepos;
+    private List<ImportantEvent> importantEvents;
+    private Color buffercolor;
+    private Texture2D buffercolortexture;
+    private int buffertimepos;
     //карты
-    List<string> maps;
-    Texture2D selectedmap;
-    int mapselector = -1;
+    private List<string> maps;
+    private Texture2D selectedmap;
+    private int mapselector = -1;
     //зоны
-    List<MapZonesList> mapszones;
-    int selectedzone = -1;
-    bool zonemode, zoneadd,zoneeditmode,pointeditmode;
+    private List<MapZonesList> mapszones;
+    private int selectedzone = -1;
+    private bool zonemode, zoneadd,zoneeditmode,pointeditmode;
     //указатель
-    Vector2Int point;
-    bool rightselector = false;
+    private Vector2Int point;
+    private bool rightselector = false;
     //перетаскивание и растягивание
-    int currentdrag;
-    bool drag = false;
-    int scaletype = 0;
+    private int currentdrag;
+    private bool drag = false;
+    private int scaletype = 0;
     //шаблоны карточек
-    List<string> presetlist;
-    bool showpresetlist = false;
-    bool createpreset = false;
+    private List<string> presetlist;
+    private bool showpresetlist = false;
+    private bool createpreset = false;
     //приколюхи
-    string projectname;
-    char[] chars = {'а','ы', 'у', 'р', 'в', 'ф', 'г', 'л', 'й', 'ц' };
-    string[] timenamers = { "День", "Сол", "Неделя", "Месяц", "Сезон", "Год","Декада", "Век", "Тысячилетие"};
+    private string projectname;
+    private char[] chars = {'а','ы', 'у', 'р', 'в', 'ф', 'г', 'л', 'й', 'ц' };
+    private string[] timenamers = { "День", "Сол", "Неделя", "Месяц", "Сезон", "Год","Декада", "Век", "Тысячилетие"};
+    private int savetimer = 3000;
     //улучшенная работа с картой
-    bool vertical = false;
-    float scale=1f;
-    Vector2 shift = new Vector2();
-    void InitializeProject()
+    private float scale =1f;
+    private Vector2 shift = new Vector2();
+    private void InitializeProject()
     {
         arbitraryselections = new List<string>();
         arbitraryselections.Add("Места");
@@ -88,7 +87,7 @@ public class SettingControll : MonoBehaviour
         cards[2].index.Add(2);
         selectedcardindex.Add(0);
     }
-    void CreateProject() {
+    private void CreateProject() {
         Directory.CreateDirectory(Application.dataPath + "/projects/"+bufferstring);
         projectpath = Application.dataPath + "/projects/" + bufferstring;
         StreamWriter file = new StreamWriter(projectpath+"/project.secod");
@@ -96,7 +95,7 @@ public class SettingControll : MonoBehaviour
         Directory.CreateDirectory(projectpath + "/pictures");
         file.Close();
     }
-    void SaveCard(Card card,StreamWriter file) {
+    private void SaveCard(Card card,StreamWriter file) {
         file.WriteLine(card.name);
         file.WriteLine(card.index.Count);
         for (int i = 0; i < card.index.Count; i++) {
@@ -122,7 +121,7 @@ public class SettingControll : MonoBehaviour
             }
         }
     }
-    Card LoadCard(StreamReader file) {
+    private Card LoadCard(StreamReader file) {
         string buffername = file.ReadLine();
         int bufferlenght = int.Parse(file.ReadLine());
         int[] bufferindex = new int[bufferlenght];
@@ -155,7 +154,7 @@ public class SettingControll : MonoBehaviour
         }
         return RetCard;
     }
-    void SaveProject() {
+    private void SaveProject() {
         StreamWriter file = new StreamWriter(projectpath+"/project.secod");
         file.WriteLine(arbitraryselections.Count);
         for (int i = 0; i < arbitraryselections.Count; i++) {
@@ -201,8 +200,10 @@ public class SettingControll : MonoBehaviour
             }
             file0.Close();
         }
+        issave = true;
+        savetimer = 3000;
     }
-    void LoadProject() {
+    private void LoadProject() {
         arbitraryselections = new List<string>();
         StreamReader file = new StreamReader(projectpath+"/project.secod");
         int bufferint = int.Parse(file.ReadLine());
@@ -259,26 +260,6 @@ public class SettingControll : MonoBehaviour
             for (int ii = 0; ii < maps[i].Length - 4; ii++) {
                 bufferstring += maps[i][ii];
             }
-           // try
-           // {
-                /*  StreamReader file0 = new StreamReader(projectpath+"/maps/"+bufferstring+".secomd");
-                  string bufstr = file0.ReadLine();
-                  mapszones.Add(new MapZonesList(bufstr));
-                  bufferint = int.Parse(file0.ReadLine());
-                  for (int ii = 0; ii < bufferint; ii++) {
-                      bufstr = file0.ReadLine();
-                      MapZone bufzone = new MapZone(bufstr);
-                      int bufint = int.Parse(file0.ReadLine());
-                      for (int iii = 0; iii < bufferint; iii++) {
-                          Vector2Int vector2Int = new Vector2Int();
-                          vector2Int.x = int.Parse(file0.ReadLine());
-                          vector2Int.y = int.Parse(file0.ReadLine());
-                          bufzone.points.Add(vector2Int);
-                      }
-                      bufzone.Compose();
-                      mapszones[mapszones.Count - 1].mapZones.Add(bufzone);
-                  }
-                  file0.Close();*/
                 try{
                 StreamReader file0 = new StreamReader(projectpath + "/maps/" + bufferstring + ".secomd");
                 string bufstr = file0.ReadLine();
@@ -310,8 +291,10 @@ public class SettingControll : MonoBehaviour
         }
         bufferstring = "";
         LoadTexts();
+        issave = true;
+        savetimer = 3000;
     }
-    void LoadPictures() {
+    private void LoadPictures() {
         if (!Directory.Exists(projectpath+"/pictures")) {Directory.CreateDirectory(projectpath+ "/pictures"); }
         projectlist = new List<string>(Directory.GetFiles(projectpath+ "/pictures"));
         List<string> bufferprojectlist = new List<string>();
@@ -332,7 +315,7 @@ public class SettingControll : MonoBehaviour
         }
         bufferstring = "";
     }
-    void LoadTexts() {
+    private void LoadTexts() {
         if (!Directory.Exists(projectpath + "/texts")) { Directory.CreateDirectory(projectpath + "/texts"); }
         textslist = new List<string>(Directory.GetFiles(projectpath + "/texts"));
         List<string> buffertextslist = new List<string>();
@@ -355,7 +338,7 @@ public class SettingControll : MonoBehaviour
         }
         bufferstring = "";
     }
-    void LoadText(int selector) {
+    private void LoadText(int selector) {
         StreamReader file = new StreamReader(projectpath + "/texts/" + textslist[selector]);
         //filetext = projectpath + "/texts/" + textslist[0] + file.ReadToEnd();
         stringlist = new List<string>();
@@ -365,14 +348,14 @@ public class SettingControll : MonoBehaviour
         }
         file.Close();
     }
-    void SaveText(int selector) {
+    private void SaveText(int selector) {
         StreamWriter file = new StreamWriter(projectpath + "/texts/" + textslist[selector]);
         for (int i = 0; i < stringlist.Count; i++) {
             file.WriteLine(stringlist[i]);
         }
         file.Close();
     }
-    void LoadPresets() {
+    private void LoadPresets() {
         if (!Directory.Exists(Application.dataPath + "/presets")) { Directory.CreateDirectory(Application.dataPath + "/presets"); }
         presetlist = new List<string>(Directory.GetFiles(Application.dataPath + "/presets"));
         List<string> bufferpresetlist = new List<string>();
@@ -395,7 +378,7 @@ public class SettingControll : MonoBehaviour
         }
         bufferstring = "";
     }
-    List<Block> LoadPreset(string path) {
+    private List<Block> LoadPreset(string path) {
         List<Block> blocks = new List<Block>();
         StreamReader file = new StreamReader(path);
         int bufint = int.Parse(file.ReadLine());
@@ -422,10 +405,10 @@ public class SettingControll : MonoBehaviour
         file.Close();
         return blocks;
     }
-    void ApplyPreset(int presetid) {
+    private void ApplyPreset(int presetid) {
         GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).blocks = LoadPreset(Application.dataPath + "/presets/"+presetlist[presetid]);
     }
-    void AddPreset(Card card, string Name) {
+    private void AddPreset(Card card, string Name) {
         StreamWriter file = new StreamWriter(Application.dataPath + "/presets/"+Name+".secop");
         file.WriteLine(card.blocks.Count);
         for (int i = 0; i < card.blocks.Count; i++) {
@@ -443,15 +426,16 @@ public class SettingControll : MonoBehaviour
         file.Close();
         presetlist.Add("Name");
     }
-    void DestroyPreset(int presetid) {
+    private void DestroyPreset(int presetid) {
         File.Delete(Application.dataPath + "/presets/"+presetlist[presetid]);
         presetlist.Remove(presetlist[presetid]);
     }
-    void Start()
+    private void Start()
     {
         if (!Directory.Exists(Application.dataPath + "/projects")) {Directory.CreateDirectory(Application.dataPath + "/projects"); }
         if (!Directory.Exists(Application.dataPath + "/presets")) {Directory.CreateDirectory(Application.dataPath + "/presets"); }
         projectlist = new List<string>(Directory.GetDirectories(Application.dataPath + "/projects"));
+        datelist = new List<string>();
         for (int i = 0; i < projectlist.Count; i++)
         {
             bufferstring = "";
@@ -460,6 +444,7 @@ public class SettingControll : MonoBehaviour
                 bufferstring += projectlist[i][ii];
             }
             projectlist[i] = bufferstring;
+            datelist.Add(Directory.GetCreationTime(projectlist[i]).ToUniversalTime().ToString());
         }
         bufferstring = "";
         importantEvents = new List<ImportantEvent>();
@@ -539,6 +524,7 @@ public class SettingControll : MonoBehaviour
             Vector2 bufpos;
             Vector2Int middlepoint=new Vector2Int();
             Vector2Int leftup = new Vector2Int(), rightdown = new Vector2Int();
+            Color32[] colors32 = new Color32[zonepicture.width * zonepicture.height];
             for (int i = 0; i < points.Count; i++) {
                 middlepoint.x += points[i].x;
                 middlepoint.y += points[i].y;
@@ -593,10 +579,13 @@ public class SettingControll : MonoBehaviour
                 if (edited) { break;}
             }
             int pixels=0;
+            int zpwidth = zonepicture.width;
             for (int iy = rightdown.y; iy < leftup.y; iy++) for (int ix = leftup.x; ix < rightdown.x; ix++) if (zonebinarymap[ix, iy] == 2) {
-                        zonepicture.SetPixel(ix,zonepicture.height-iy,color);
+                        //zonepicture.SetPixel(ix,zonepicture.height-iy,color);
+                        colors32[ix + (zonepicture.height - iy) * zpwidth] = color;
                         pixels++;
             }
+            zonepicture.SetPixels32(colors32);
             zonepicture.Apply();
         }
     }
@@ -665,7 +654,7 @@ public class SettingControll : MonoBehaviour
             blocks = new List<Block>();
         }
     }
-    void show(Card card, int recursiondeep)
+    private void show(Card card, int recursiondeep)
     {
         if (GUI.Button(new Rect(Screen.width - 200 + recursiondeep * 5, (megacounter-scroller) * 25, 200 - recursiondeep * 5, 25), "" + card.name, button))
         {
@@ -693,7 +682,7 @@ public class SettingControll : MonoBehaviour
                 show(card.childrens[i], recursiondeep);
             }
     }
-    void ShowWithTimeLine(int time, Card card,int deep) {
+    private void ShowWithTimeLine(int time, Card card,int deep) {
         if (deep > 100) { return; }
         for (int i = 0; i < card.blocks.Count; i++) {
             if (card.blocks[i].time == time&&card.blocks[i].timegroup) {
@@ -706,7 +695,7 @@ public class SettingControll : MonoBehaviour
             ShowWithTimeLine(time,card.childrens[i],deep);
         }
     }
-    void ShowWithNonStaticTimeLine(int time,Card card,int deep) {
+    private void ShowWithNonStaticTimeLine(int time,Card card,int deep) {
         if (deep > 100) { return; }
         for (int i = 0; i < card.blocks.Count; i++) 
         {
@@ -730,7 +719,7 @@ public class SettingControll : MonoBehaviour
             ShowWithNonStaticTimeLine(time, card.childrens[i], deep);
         }
     }
-    Card GetCard(Card card, List<int> index, int step)
+    private Card GetCard(Card card, List<int> index, int step)
     {
         if (index.Count == step)
         {
@@ -742,13 +731,13 @@ public class SettingControll : MonoBehaviour
         }
         return card;
     }
-    void Update()
+    private void Update()
     {
         if (guiphase == 1)
         {
             if (Input.mousePosition.x < Screen.width - 200 && Input.mousePosition.x > 200 && Input.mousePosition.y > 200 && scaletype == 0)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse1)&&!Input.GetKey(KeyCode.Space))
                 {
                     rightselector = true;
                     point = new Vector2Int((int)Input.mousePosition.x, Screen.height - (int)Input.mousePosition.y);
@@ -862,12 +851,12 @@ public class SettingControll : MonoBehaviour
                     }
                 }
             }
-                if (Input.GetKey(KeyCode.Mouse2))
+                if (Input.GetKey(KeyCode.Mouse2)||(Input.GetKey(KeyCode.Mouse1)&&Input.GetKey(KeyCode.Space)))
                 {
                     shift += new Vector2(Input.GetAxis("Mouse X") * 9f*(Screen.width/selectedmap.width), Input.GetAxis("Mouse Y") * -9f * ((Screen.height*1f) / (selectedmap.height*1f))); 
                 }
-                if (Input.GetAxis("Mouse ScrollWheel") > 0f||Input.GetKey(KeyCode.Plus)) { scale += 0.1f;}
-                if (Input.GetAxis("Mouse ScrollWheel") < 0f || Input.GetKey(KeyCode.Minus)) { scale -= 0.1f; }
+                if (Input.GetAxis("Mouse ScrollWheel") > 0f||Input.GetKeyDown(KeyCode.Equals)) { scale += 0.1f;}
+                if (Input.GetAxis("Mouse ScrollWheel") < 0f || Input.GetKeyDown(KeyCode.Minus)) { scale -= 0.1f; }
             }
                 if ((guisection == 3||guisection==0 || guisection == 4)&&Input.mousePosition.x>Screen.width-200) {
                     if (Input.GetAxis("Mouse ScrollWheel") < 0f) { if (scroller < megacounter - 1) { scroller++; } }
@@ -879,15 +868,16 @@ public class SettingControll : MonoBehaviour
                 shift = new Vector2((Screen.width - 400) * 0.5f - (selectedmap.width * scale * 0.5f), 0);
             }
         }
+        if (issave) { if (savetimer > 0) { --savetimer; } else { issave = false; } }
     }
     private void OnGUI()
     {
         if (guiphase == 0)
         {
-            GUI.Box(new Rect(200, 0, 300, 60), "Существующие проекты:", boxtexture);
+            GUI.Box(new Rect(Screen.width*0.5f-150, 0, 300, 60), "Существующие проекты:", boxtexture);
             for (int i = 0; i < projectlist.Count; i++)
             {
-                if (GUI.Button(new Rect(200, 60 + i * 60, 300, 60), projectlist[i], button))
+                if (GUI.Button(new Rect(Screen.width*0.5f-150, 60 + i * 60, 300, 60), projectlist[i], button))
                 {
                     projectpath = Application.dataPath + "/projects/"+projectlist[i];
                     projectname = projectlist[i];
@@ -895,8 +885,10 @@ public class SettingControll : MonoBehaviour
                     LoadPictures();
                     guiphase = 1;
                 }
+                //GUI.Box(new Rect(500, 60 + i * 60, 200, 60), datelist[i], boxtexture);
             }
-            if (GUI.Button(new Rect(Screen.width-300, 0, 300, 60), "Создать новый проект", button)) { InitializeProject(); guiphase = 2; }
+            if (GUI.Button(new Rect(Screen.width*0.5f+150, 0, 300, 60), "Создать новый проект", button)) { InitializeProject(); guiphase = 2; }
+            if (GUI.Button(new Rect(0, Screen.height - 20, 120, 20), "Выйти", button)) { Application.Quit(); }
         }
         else if (guiphase == 1)
         {
@@ -935,7 +927,11 @@ public class SettingControll : MonoBehaviour
                 if (GUI.Button(new Rect(0, 60, 200, 25), "Сохранить", button)) { SaveProject(); leftmenu = false; }
                 if (GUI.Button(new Rect(0, 85, 200, 25), "Меню", button)) { SaveProject(); Application.LoadLevel(0); }
                 if (GUI.Button(new Rect(0, 110, 200, 25), "О программе", button)) { showinfo = true; leftmenu = false; }
-                if (GUI.Button(new Rect(0, 135, 200, 25), "Выход", button)) { SaveProject(); Application.Quit(); }
+                if (GUI.Button(new Rect(0, 135, 200, 25), "Помощь", button)) { showhelp = true; leftmenu = false; }
+                if (GUI.Button(new Rect(0, 160, 200, 25), "Выход", button)) { SaveProject(); Application.Quit(); }
+            }
+            if (issave) {
+                GUI.Box(new Rect(200, 0, 20, 20), savepic,boxtexture);
             }
             //таймлайн
             GUI.Box(new Rect(0,Screen.height-200,105,25),"Таймлайн",boxtexture);
@@ -1195,8 +1191,10 @@ public class SettingControll : MonoBehaviour
                         GUI.Box(new Rect(Screen.width - 225, Screen.height - 250, 25, 25), "", selectedbutton);
                     }
                 }
-                if (GUI.Button(new Rect(Screen.width - 225, Screen.height - 225, 25, 25), "Z", button)) {
-                    if (zonemode) {
+                if(mapselector!=-1)if (GUI.Button(new Rect(Screen.width - 225, Screen.height - 225, 25, 25), "Z", button))
+                {
+                    if (zonemode)
+                    {
                         zonemode = false;
                         scroller = 0;
                     }
@@ -1521,10 +1519,8 @@ public class SettingControll : MonoBehaviour
                     }
                     else
                     {
-                        //bufferindex.Add(GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).childrens.Count);
                         GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).childrens.Add(new Card(bufferstring, bufferindex));
                         GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).childrens[GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).childrens.Count - 1].index.Add(GetCard(cards[selectedcardindex[0]], selectedcardindex, 1).childrens.Count - 1);
-                        //GetCard(cards[selectedcardindex[0]], selectedcardindex, 0).childrens[GetCard(cards[selectedcardindex[0]], selectedcardindex, 0).childrens.Count - 1].index.Add(GetCard(cards[selectedcardindex[0]], selectedcardindex, 0).childrens.Count - 1);
                     }
                     bufferstring = ""; addcard = false; bufferindex = new List<int>();
                 }
@@ -1685,19 +1681,12 @@ public class SettingControll : MonoBehaviour
         }
         if (GUI.Button(new Rect(0, 0, 200, 60), SettingControlLogo, button))
         {
-            if (leftmenu)
-            {
-                leftmenu = false;
-            }
-            else
-            {
-                leftmenu = true;
-            }
+            leftmenu = !leftmenu;
         }
         if (showinfo) {
             GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-200,400,400), "", boxtexture);
             GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-200,400,25), "О программе", boxtexture);
-            GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-175,400,25), "Setting Control ver 1.02", boxtexture);
+            GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-175,400,25), "Setting Control ver 1.03", boxtexture);
             GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 150, 400, 50), "Информация, обновления и другие программы - vk.com/rival_coding", boxtexture);
             GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 100, 400, 25), "Разработчики: ", boxtexture);
             GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 75, 400, 50), "Алексей Rival - буквально всё - vk.com/rival_alexey", boxtexture);
@@ -1707,6 +1696,21 @@ public class SettingControll : MonoBehaviour
             GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f +125, 400, 50), "Моя любимая мама - за всё светлое, что есть в моей жизни", boxtexture);
             if (GUI.Button(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f + 175, 400, 25), "Понятно", button)) {
                 showinfo = false;
+            }
+        }
+        if (showhelp) {
+            GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-200,400,400), "", boxtexture);
+            GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-200,400,25), "Помощь", boxtexture);
+            GUI.Box(new Rect(Screen.width*0.5f-200,Screen.height*0.4f-175,400,25), "Картографический режим:", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 150, 400, 50), "ПКМ+Пробел - включить режим перетаскивания", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 100, 400, 25), "+-/колёсико - приблизить/отдалить", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 75, 400, 50), "ЛКМ - установка точек и зон", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f - 25, 400, 50), "Ctrl+0 - сбросить масштаб", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f + 25,400, 25), "В остальных местах:", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f + 50, 400, 75), "ЛКМ - действие, ПКМ - контекстное меню(если есть)", boxtexture);
+            GUI.Box(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f +125, 400, 50), "По остальным вопросам - vk.com/rival_coding", boxtexture);
+            if (GUI.Button(new Rect(Screen.width * 0.5f - 200, Screen.height * 0.4f + 175, 400, 25), "Понятно", button)) {
+                showhelp = false;
             }
         }
     }
